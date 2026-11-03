@@ -31,25 +31,45 @@ public class YouTubeService {
                 .retrieve()
                 .body(YouTubeResponse.class);
 
-        if (response != null && response.getItems() != null && !response.getItems().isEmpty()) {
-            VideoItem item = response.getItems().getFirst();
-            Snippet snippet = item.getSnippet();
-            Statistics stats = item.getStatistics();
-            ContentDetails details = item.getContentDetails();
+        if (response != null && response.items() != null && !response.items().isEmpty()) {
+            VideoItem item = response.items().getFirst();
+            Snippet snippet = item.snippet();
+            Statistics stats = item.statistics();
+            ContentDetails details = item.contentDetails();
 
             return new VideoDetails(
-                    snippet != null ? snippet.getTitle() : "No title",
-                    snippet != null ? snippet.getDescription() : "",
-                    details != null ? convert(details.getDuration()) : "Unknown",
-                    snippet != null ? snippet.getChannelTitle() : "",
-                    snippet != null ? snippet.getPublishedAt() : "",
-                    (stats != null && stats.getViewCount() != null) ? Long.parseLong(stats.getViewCount()) : 0,
-                    (stats != null && stats.getLikeCount() != null) ? Long.parseLong(stats.getLikeCount()) : 0,
-                    (stats != null && stats.getCommentCount() != null) ? Long.parseLong(stats.getCommentCount()) : 0
+                    snippet != null ? snippet.title() : "No title",
+                    snippet != null ? snippet.description() : "",
+                    details != null ? convert(details.duration()) : "Unknown",
+                    snippet != null ? snippet.channelTitle() : "",
+                    snippet != null ? snippet.publishedAt() : "",
+                    (stats != null && stats.viewCount() != null) ? Long.parseLong(stats.viewCount()) : 0,
+                    (stats != null && stats.likeCount() != null) ? Long.parseLong(stats.likeCount()) : 0,
+                    (stats != null && stats.commentCount() != null) ? Long.parseLong(stats.commentCount()) : 0
             );
         }
 
         throw new RuntimeException("Video not found or no statistics available.");
+    }
+
+    public ChannelStatistics getChannelDetails(String channelId) {
+        String url = UriComponentsBuilder.fromUriString("https://www.googleapis.com/youtube/v3/channels")
+                .queryParam("part", "snippet,statistics,contentDetails,brandingSettings")
+                .queryParam("id", channelId)
+                .queryParam("key", apiKey)
+                .toUriString();
+
+        YouTubeChannelApiResponse response = restClient.get()
+                .uri(url)
+                .retrieve()
+                .body(YouTubeChannelApiResponse.class);
+
+        if (response != null && !response.items().isEmpty()) {
+            System.out.println(response.items().getFirst());
+            return response.items().getFirst().statistics();
+        }
+
+        throw new RuntimeException("Channel not found for ID: " + channelId);
     }
 
     private String convert(String duration) {
