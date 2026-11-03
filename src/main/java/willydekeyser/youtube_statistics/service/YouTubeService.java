@@ -6,8 +6,6 @@ import org.springframework.web.client.RestClient;
 import org.springframework.web.util.UriComponentsBuilder;
 import willydekeyser.youtube_statistics.model.*;
 
-import java.time.Duration;
-
 @Service
 public class YouTubeService {
 
@@ -19,40 +17,26 @@ public class YouTubeService {
 
     private final RestClient restClient = RestClient.create();
 
-    public VideoDetails getVideoDetails(String videoId) {
+    public YouTubeVideoApiResponse.VideoItem getVideoDetails(String videoId) {
         String url = UriComponentsBuilder.fromUriString(apiUrl)
                 .queryParam("part", "snippet,statistics,contentDetails")
                 .queryParam("id", videoId)
                 .queryParam("key", apiKey)
                 .toUriString();
 
-        YouTubeResponse response = restClient.get()
+        YouTubeVideoApiResponse response = restClient.get()
                 .uri(url)
                 .retrieve()
-                .body(YouTubeResponse.class);
+                .body(YouTubeVideoApiResponse.class);
 
         if (response != null && response.items() != null && !response.items().isEmpty()) {
-            VideoItem item = response.items().getFirst();
-            Snippet snippet = item.snippet();
-            Statistics stats = item.statistics();
-            ContentDetails details = item.contentDetails();
-
-            return new VideoDetails(
-                    snippet != null ? snippet.title() : "No title",
-                    snippet != null ? snippet.description() : "",
-                    details != null ? convert(details.duration()) : "Unknown",
-                    snippet != null ? snippet.channelTitle() : "",
-                    snippet != null ? snippet.publishedAt() : "",
-                    (stats != null && stats.viewCount() != null) ? Long.parseLong(stats.viewCount()) : 0,
-                    (stats != null && stats.likeCount() != null) ? Long.parseLong(stats.likeCount()) : 0,
-                    (stats != null && stats.commentCount() != null) ? Long.parseLong(stats.commentCount()) : 0
-            );
+            return response.items().getFirst();
         }
 
         throw new RuntimeException("Video not found or no statistics available.");
     }
 
-    public ChannelStatistics getChannelDetails(String channelId) {
+    public YouTubeChannelApiResponse.ChannelItem getChannelDetails(String channelId) {
         String url = UriComponentsBuilder.fromUriString("https://www.googleapis.com/youtube/v3/channels")
                 .queryParam("part", "snippet,statistics,contentDetails,brandingSettings")
                 .queryParam("id", channelId)
@@ -64,16 +48,12 @@ public class YouTubeService {
                 .retrieve()
                 .body(YouTubeChannelApiResponse.class);
 
-        if (response != null && !response.items().isEmpty()) {
-            System.out.println(response.items().getFirst());
-            return response.items().getFirst().statistics();
+        if(response != null && !response.items().isEmpty()) {
+            System.out.print(response.items().getFirst());
+            return response.items().getFirst();
         }
 
         throw new RuntimeException("Channel not found for ID: " + channelId);
     }
 
-    private String convert(String duration) {
-        Duration time = Duration.parse(duration);
-        return time.toMinutes() + ":" + time.toSecondsPart();
-    }
 }
