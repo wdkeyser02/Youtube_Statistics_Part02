@@ -11,24 +11,25 @@ public record YouTubeVideoApiResponse(
     public record VideoItem (
             Snippet snippet,
             Statistics statistics,
-            ContentDetails contentDetails) {}
+            ContentDetails contentDetails) {
 
-    @JsonIgnoreProperties(ignoreUnknown = true)
-    private record Snippet(
-            String title,
-            String description,
-            String publishedAt,
-            String channelTitle) {}
+        @JsonIgnoreProperties(ignoreUnknown = true)
+        private record Snippet(
+                String title,
+                String description,
+                String publishedAt,
+                String channelTitle) {}
 
-    @JsonIgnoreProperties(ignoreUnknown = true)
-    private record Statistics (
-            String viewCount,
-            String likeCount,
-            String commentCount) {}
+        @JsonIgnoreProperties(ignoreUnknown = true)
+        private record Statistics (
+                String viewCount,
+                String likeCount,
+                String commentCount) {}
 
-    @JsonIgnoreProperties(ignoreUnknown = true)
-    private record ContentDetails (
-            String duration) {}
+        @JsonIgnoreProperties(ignoreUnknown = true)
+        private record ContentDetails (
+                String duration) {}
+    }
 
 }
 
