@@ -9,6 +9,9 @@ public record YouTubeVideoApiResponse(
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public record VideoItem (
+            String kind,
+            String etag,
+            String id,
             Snippet snippet,
             Statistics statistics,
             ContentDetails contentDetails) {

@@ -49,7 +49,6 @@ public class YouTubeService {
                 .body(YouTubeChannelApiResponse.class);
 
         if(response != null && !response.items().isEmpty()) {
-            System.out.print(response.items().getFirst());
             return response.items().getFirst();
         }
 

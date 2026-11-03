@@ -1,6 +1,7 @@
 package willydekeyser.youtube_statistics.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
@@ -31,9 +32,13 @@ public record YouTubeChannelApiResponse(
 
             @JsonIgnoreProperties(ignoreUnknown = true)
             private record Thumbnails (
-                    Medium medium) {
+                    @JsonProperty("default")
+                    Thumbnail normal,
+                    Thumbnail medium,
+                    Thumbnail high) {
+
                 @JsonIgnoreProperties(ignoreUnknown = true)
-                private record Medium (
+                private record Thumbnail (
                         String url,
                         Integer width,
                         Integer height) {}
