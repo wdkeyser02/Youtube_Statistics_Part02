@@ -10,15 +10,18 @@ import willydekeyser.youtube_statistics.model.*;
 public class YouTubeService {
 
     @Value("${youtube.api.key}")
-    private String apiKey;
+    private String apiKey; //
 
-    @Value("${youtube.api.url}")
-    private String apiUrl;
+    @Value("${youtube.api.video.url}")
+    private String apiVideoUrl; // https://www.googleapis.com/youtube/v3/videos
+
+    @Value("${youtube.api.channel.url}")
+    private String apiChannelUrl; // https://www.googleapis.com/youtube/v3/channels
 
     private final RestClient restClient = RestClient.create();
 
     public YouTubeVideoApiResponse.VideoItem getVideoDetails(String videoId) {
-        String url = UriComponentsBuilder.fromUriString(apiUrl)
+        String url = UriComponentsBuilder.fromUriString(apiVideoUrl)
                 .queryParam("part", "snippet,statistics,contentDetails")
                 .queryParam("id", videoId)
                 .queryParam("key", apiKey)
@@ -37,7 +40,7 @@ public class YouTubeService {
     }
 
     public YouTubeChannelApiResponse.ChannelItem getChannelDetails(String channelId) {
-        String url = UriComponentsBuilder.fromUriString("https://www.googleapis.com/youtube/v3/channels")
+        String url = UriComponentsBuilder.fromUriString(apiChannelUrl)
                 .queryParam("part", "snippet,statistics,contentDetails,brandingSettings")
                 .queryParam("id", channelId)
                 .queryParam("key", apiKey)

@@ -3,14 +3,148 @@
 <head>
     <meta charset="UTF-8">
     <title>Spring Boot Tutorials</title>
+    <script src="https://cdn.jsdelivr.net/npm/htmx.org@latest/dist/htmx.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/htmx-json@latest/dist/htmx-json.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f4f6f9; margin: 30px; text-align: center;}
+        label { width: 100px; }
+        #channel-info, #video-info, p, h3 {text-align: left;}
+        div {
+            border: 5px solid black;
+            border-radius: 10px;
+            padding: 10px;
+        }
+    </style>
 </head>
-<body>
+<body hx-ext="json-swap">
 <h1>Spring Boot Tutorials</h1>
-<p>
-    <a href="http://localhost:8080/api/channel-info?channelId=UClrC0HaC7gJHkLS9VJyz4SA">Channel Info</a>
-</p>
-<p>
-    <a href="http://localhost:8080/api/video-info?videoId=vRQgnSHaGak">Video Info</a>
-</p>
+
+<form hx-get="http://localhost:8080/api/channel-info"
+      hx-target="#channel-info"
+      hx-swap="json">
+    <label for="channelId">Channel info: </label>
+    <input type="text" id="channelId" name="channelId" value="UClrC0HaC7gJHkLS9VJyz4SA" size="50">
+    <button type="submit">Get Channel info</button>
+</form>
+
+<form hx-get="http://localhost:8080/api/video-info"
+      hx-target="#video-info"
+      hx-swap="json">
+    <label for="videoId">Video info: </label>
+    <input type="text" id="videoId" name="videoId" value="vRQgnSHaGak" size="50">
+    <button type="submit">Get Video info</button>
+</form>
+
+<h3>Channel Info: </h3>
+<div id="channel-info">
+    <template json-if="kind != null">
+        <p>Kind: <span json-text="kind"></span></p>
+        <p>Etag: <span json-text="etag"></span></p>
+        <p>Id: <span json-text="id"></span></p>
+        <p>Snippet:</p>
+        <blockquote>
+            <p>Title: <span json-text="snippet.title"></span></p>
+            <p>Custom Url: <span><a  target="_blank" @href="`${'https://www.youtube.com/' + snippet.customUrl}`">${snippet.customUrl}</a></span></p>
+            <p>Custom Url: <span json-text="snippet.customUrl"></span></p>
+            <p>Published At: <span json-text="snippet.publishedAt"></span></p>
+            <p>Thumbnails:</p>
+            <blockquote>
+                <p>Default:</p>
+                <blockquote>
+                    <p>Url: <span><a  target="_blank" @href="`${snippet.thumbnails.default.url}`">${snippet.thumbnails.default.url}</a></span></p>
+                    <p>Width: <span json-text="snippet.thumbnails.default.width"></span></p>
+                    <p>Height: <span json-text="snippet.thumbnails.default.height"></span></p>
+                </blockquote>
+                <p>Medium:</p>
+                <blockquote>
+                    <p>Url: <span><a  target="_blank" @href="`${snippet.thumbnails.medium.url}`">${snippet.thumbnails.medium.url}</a></span></p>
+                    <p>Width: <span json-text="snippet.thumbnails.medium.width"></span></p>
+                    <p>Height: <span json-text="snippet.thumbnails.medium.height"></span></p>
+                </blockquote>
+                <p>High:</p>
+                <blockquote>
+                    <p>Url: <span><a  target="_blank" @href="`${snippet.thumbnails.high.url}`">${snippet.thumbnails.high.url}</a></span></p>
+                    <p>Width: <span json-text="snippet.thumbnails.high.width"></span></p>
+                    <p>Height: <span json-text="snippet.thumbnails.high.height"></span></p>
+                </blockquote>
+            </blockquote>
+            <p>Default Language: <span json-text="snippet.defaultLanguage"></span></p>
+            <p>Localized:</p>
+            <blockquote>
+                <p>Title: <span json-text="snippet.localized.title"></span></p>
+                <p>Description: <span json-text="snippet.localized.description"></span></p>
+            </blockquote>
+            <p>Country: <span json-text="snippet.country"></span></p>
+        </blockquote>
+        <p>Channel Statistics:</p>
+        <blockquote>
+            <p>View Count: <span json-text="statistics.viewCount"></span></p>
+            <p>Subscriber Count: <span json-text="statistics.subscriberCount"></span></p>
+            <p>Hidden Subscriber Count: <span json-text="statistics.hiddenSubscriberCount"></span></p>
+            <p>Video Count: <span json-text="statistics.videoCount"></span></p>
+        </blockquote>
+        <p>Content Details:</p>
+        <blockquote>
+            <p>Related Playlists:</p>
+            <blockquote>
+                <p>Likes: <span json-text="contentDetails.relatedPlaylists.likes"></span></p>
+                <p>Favorites: <span json-text="contentDetails.relatedPlaylists.favorites"></span></p>
+                <p>Uploads: <span json-text="contentDetails.relatedPlaylists.uploads"></span></p>
+            </blockquote>
+        </blockquote>
+        <p>Branding Settings:</p>
+        <blockquote>
+            <p>Channel Settings:</p>
+            <blockquote>
+                <p>Title: <span json-text="brandingSettings.channel.title"></span></p>
+                <p>Description: <span json-text="brandingSettings.channel.description"></span></p>
+                <p>Keywords: <span json-text="brandingSettings.channel.keywords"></span></p>
+                <p>Tracking Analytics Trailer: <span json-text="brandingSettings.channel.trackingAnalyticsTrailer"></span></p>
+                <p>Default Language: <span json-text="brandingSettings.channel.defaultLanguage"></span></p>
+                <p>Country: <span json-text="brandingSettings.channel.country"></span></p>
+            </blockquote>
+            <p>Watch:</p>
+            <template json-if="brandingSettings.watch != null">
+            <blockquote>
+                <p>Text Color: <span json-text="brandingSettings.watch.textColor"></span></p>
+                <p>Background Color: <span json-text="brandingSettings.watch.backgroundColor"></span></p>
+                <p>Featured PlaylistId: <span json-text="brandingSettings.watch.featuredPlaylistId"></span></p>
+            </blockquote>
+            </template>
+            <template json-else>
+                <blockquote>
+                    <p>Text Color:</p>
+                    <p>Background Color:</p>
+                    <p>Featured PlaylistId:</p>
+                </blockquote>
+            </template>
+        </blockquote>
+    </template>
+</div>
+<h3>Video Info: </h3>
+<div id="video-info">
+    <template json-if="kind != null">
+        <p>Kind: <span json-text="kind"></span></p>
+        <p>Etag: <span json-text="etag"></span></p>
+        <p>Id: <span json-text="id"></span></p>
+        <p>Snippet:</p>
+        <blockquote>
+            <p>Title: <span json-text="snippet.title"></span></p>
+            <p>Description: <span json-text="snippet.description"></span></p>
+            <p>Published At: <span json-text="snippet.publishedAt"></span></p>
+            <p>Channel Title: <span json-text="snippet.channelTitle"></span></p>
+        </blockquote>
+        <p>Statistics:</p>
+        <blockquote>
+            <p>View Count: <span json-text="statistics.viewCount"></span></p>
+            <p>Like Count: <span json-text="statistics.likeCount"></span></p>
+            <p>Comment Count: <span json-text="statistics.commentCount"></span></p>
+        </blockquote>
+        <p>Content Details:</p>
+        <blockquote>
+            <p>Duration: <span json-text="contentDetails.duration"></span></p>
+        </blockquote>
+    </template>
+</div>
 </body>
 </html>
