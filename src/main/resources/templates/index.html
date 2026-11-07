@@ -6,17 +6,31 @@
     <script src="https://cdn.jsdelivr.net/npm/htmx.org@latest/dist/htmx.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/htmx-json@latest/dist/htmx-json.min.js"></script>
     <style>
-        body { font-family: Arial, sans-serif; background: #f4f6f9; margin: 30px; text-align: center;}
+        body { font-family: Arial, sans-serif; background-color: #f4f6f9; color: black; margin: 30px; text-align: center;}
         label { width: 100px; }
         #channel-info, #video-info, p, h3 {text-align: left;}
+        #toggle_button {
+            position: absolute;
+            right: 100px;
+            width: 150px;
+            height: 30px;
+        }
         div {
             border: 5px solid black;
             border-radius: 10px;
             padding: 10px;
         }
+        .dark-mode_border {
+            border: 5px solid white;
+        }
+        .dark-mode {
+            background-color: black;
+            color: white;
+        }
     </style>
 </head>
 <body hx-ext="json-swap">
+<button onclick="myFunction()" id="toggle_button">Toggle dark mode</button>
 <h1>Spring Boot Tutorials</h1>
 
 <form hx-get="http://localhost:8080/api/channel-info"
@@ -146,5 +160,13 @@
         </blockquote>
     </template>
 </div>
+<script>
+    function myFunction() {
+        const element_body = document.body;
+        element_body.classList.toggle("dark-mode");
+        const element_div = document.querySelectorAll("div");
+        element_div.forEach(element => {element.classList.toggle("dark-mode_border");});
+    }
+</script>
 </body>
 </html>
