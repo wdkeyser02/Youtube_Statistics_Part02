@@ -7,18 +7,25 @@
     <script src="https://cdn.jsdelivr.net/npm/htmx-json@latest/dist/htmx-json.min.js"></script>
     <style>
         body { font-family: Arial, sans-serif; background-color: #f4f6f9; color: black; margin: 30px; text-align: center;}
-        label { width: 100px; }
+        label { display:inline-block; width: 150px; text-align:right;}
+        input { width: 250px; }
+        button { width: 150px; }
+        form {margin: 10px;}
         #channel-info, #video-info, p, h3 {text-align: left;}
         #toggle_button {
             position: absolute;
             right: 100px;
-            width: 150px;
             height: 30px;
+        }
+        p{
+            line-height: 1.0;
+            margin: 3px;
         }
         div {
             border: 5px solid black;
             border-radius: 10px;
             padding: 10px;
+            font-size: 12px;
         }
         .dark-mode_border {
             border: 5px solid white;
@@ -30,7 +37,7 @@
     </style>
 </head>
 <body hx-ext="json-swap">
-<button onclick="myFunction()" id="toggle_button">Toggle dark mode</button>
+<button onclick="myToggleFunction()" id="toggle_button">Toggle dark mode</button>
 <h1>Spring Boot Tutorials</h1>
 
 <form hx-get="http://localhost:8080/api/channel-info"
@@ -59,7 +66,6 @@
         <blockquote>
             <p>Title: <span json-text="snippet.title"></span></p>
             <p>Custom Url: <span><a  target="_blank" @href="`${'https://www.youtube.com/' + snippet.customUrl}`">${snippet.customUrl}</a></span></p>
-            <p>Custom Url: <span json-text="snippet.customUrl"></span></p>
             <p>Published At: <span json-text="snippet.publishedAt"></span></p>
             <p>Thumbnails:</p>
             <blockquote>
@@ -161,7 +167,7 @@
     </template>
 </div>
 <script>
-    function myFunction() {
+    function myToggleFunction() {
         const element_body = document.body;
         element_body.classList.toggle("dark-mode");
         const element_div = document.querySelectorAll("div");
