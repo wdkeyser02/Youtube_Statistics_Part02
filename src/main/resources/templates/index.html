@@ -43,16 +43,32 @@
 <form hx-get="http://localhost:8080/api/channel-info"
       hx-target="#channel-info"
       hx-swap="json">
-    <label for="channelId">Channel info: </label>
-    <input type="text" id="channelId" name="channelId" value="UClrC0HaC7gJHkLS9VJyz4SA" size="50">
+    <label for="channel_Id">Channel info: </label>
+    <input
+            id="channel_Id"
+            type="text"
+            name="channel_Id"
+            value="Laden..."
+            hx-get="/api/channel-info-input"
+            hx-trigger="load"
+            hx-target="#channel_Id"
+            hx-swap="outerHTML" />
     <button type="submit">Get Channel info</button>
 </form>
 
 <form hx-get="http://localhost:8080/api/video-info"
       hx-target="#video-info"
       hx-swap="json">
-    <label for="videoId">Video info: </label>
-    <input type="text" id="videoId" name="videoId" value="vRQgnSHaGak" size="50">
+    <label for="video_Id">Video info: </label>
+    <input
+            id="video_Id"
+            type="text"
+            name="video_Id"
+            value="Laden..."
+            hx-get="/api/video-info-input"
+            hx-trigger="load"
+            hx-target="#video_Id"
+            hx-swap="outerHTML" />
     <button type="submit">Get Video info</button>
 </form>
 
