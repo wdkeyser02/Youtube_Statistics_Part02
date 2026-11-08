@@ -49,7 +49,7 @@
             name="channel_Id"
             value="Load..."
             hx-get="/api/channel-info-input"
-            hx-trigger="load"
+            hx-trigger="load delay:3s"
             hx-target="#channel_Id"
             hx-swap="outerHTML" />
     <button type="submit">Get Channel info</button>
@@ -64,7 +64,7 @@
             name="video_Id"
             value="Load..."
             hx-get="/api/video-info-input"
-            hx-trigger="load"
+            hx-trigger="load delay:5s"
             hx-target="#video_Id"
             hx-swap="outerHTML" />
     <button type="submit">Get Video info</button>
@@ -79,25 +79,25 @@
         <p>Snippet:</p>
         <blockquote>
             <p>Title: <span json-text="snippet.title"></span></p>
-            <p>Custom Url: <span><a  target="_blank" @href="`${'https://www.youtube.com/' + snippet.customUrl}`">${snippet.customUrl}</a></span></p>
+            <p>Custom Url: <span><a  target="_blank" @href="'https://www.youtube.com/' + snippet.customUrl" json-text="snippet.customUrl"></a></span></p>
             <p>Published At: <span json-text="snippet.publishedAt"></span></p>
             <p>Thumbnails:</p>
             <blockquote>
                 <p>Default:</p>
                 <blockquote>
-                    <p>Url: <span><a  target="_blank" @href="`${snippet.thumbnails.default.url}`">${snippet.thumbnails.default.url}</a></span></p>
+                    <p>Url: <span><a  target="_blank" @href="snippet.thumbnails.default.url" json-text="snippet.thumbnails.default.url"></a></span></p>
                     <p>Width: <span json-text="snippet.thumbnails.default.width"></span></p>
                     <p>Height: <span json-text="snippet.thumbnails.default.height"></span></p>
                 </blockquote>
                 <p>Medium:</p>
                 <blockquote>
-                    <p>Url: <span><a  target="_blank" @href="`${snippet.thumbnails.medium.url}`">${snippet.thumbnails.medium.url}</a></span></p>
+                    <p>Url: <span><a  target="_blank" @href="snippet.thumbnails.medium.url" json-text="snippet.thumbnails.medium.url"></a></span></p>
                     <p>Width: <span json-text="snippet.thumbnails.medium.width"></span></p>
                     <p>Height: <span json-text="snippet.thumbnails.medium.height"></span></p>
                 </blockquote>
                 <p>High:</p>
                 <blockquote>
-                    <p>Url: <span><a  target="_blank" @href="`${snippet.thumbnails.high.url}`">${snippet.thumbnails.high.url}</a></span></p>
+                    <p>Url: <span><a  target="_blank" @href="snippet.thumbnails.high.url" json-text="snippet.thumbnails.high.url"></a></span></p>
                     <p>Width: <span json-text="snippet.thumbnails.high.width"></span></p>
                     <p>Height: <span json-text="snippet.thumbnails.high.height"></span></p>
                 </blockquote>
@@ -138,20 +138,11 @@
                 <p>Country: <span json-text="brandingSettings.channel.country"></span></p>
             </blockquote>
             <p>Watch:</p>
-            <template json-if="brandingSettings.watch != null">
             <blockquote>
-                <p>Text Color: <span json-text="brandingSettings.watch.textColor"></span></p>
-                <p>Background Color: <span json-text="brandingSettings.watch.backgroundColor"></span></p>
-                <p>Featured PlaylistId: <span json-text="brandingSettings.watch.featuredPlaylistId"></span></p>
+                <p>Text Color: <span json-text="brandingSettings.watch?.textColor"></span></p>
+                <p>Background Color: <span json-text="brandingSettings.watch?.backgroundColor"></span></p>
+                <p>Featured PlaylistId: <span json-text="brandingSettings.watch?.featuredPlaylistId"></span></p>
             </blockquote>
-            </template>
-            <template json-else>
-                <blockquote>
-                    <p>Text Color:</p>
-                    <p>Background Color:</p>
-                    <p>Featured PlaylistId:</p>
-                </blockquote>
-            </template>
         </blockquote>
     </template>
 </div>
